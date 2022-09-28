@@ -17,7 +17,7 @@ void lcd_init(struct lcd_disp * lcd){
 	/* init sequence */
 	delay_us(40000);
 	lcd_write(lcd->addr, INIT_8_BIT_MODE, xpin);
-	delay_us(5000);
+	 delay_us(5000);
 	lcd_write(lcd->addr, INIT_8_BIT_MODE, xpin);
 	delay_us(10000);
 	lcd_write(lcd->addr, INIT_8_BIT_MODE, xpin);
@@ -45,7 +45,7 @@ void lcd_write(uint8_t addr, uint8_t data, uint8_t xpin){
 	/* send data via i2c */
 	HAL_I2C_Master_Transmit(&HI2C_DEF, addr, tx_data, 4, 100);
 
-	delay_us(750);
+	 delay_us(750);
 }
 
 void lcd_display(struct lcd_disp * lcd){
@@ -88,26 +88,54 @@ void lcd_clear(struct lcd_disp * lcd)
 	/* clear display */
 	lcd_write(lcd->addr, CLEAR_LCD, xpin);
 }
+//void displayReadings(int disp_No){
+//	switch(disp_No){
+//	case 1:
+//	  sprintf((char *)disp.f_line, "HSens1: %2.f%%", moisture_percentage[0]);
+//	  sprintf((char *)disp.s_line, "HSens2: %2.f%%", moisture_percentage[1]);
+//		break;
+//	case 2:
+//	  sprintf((char *)disp.f_line, "HSens3: %2.f%%", moisture_percentage[2]);
+//	  sprintf((char *)disp.s_line, "HSens4: %2.f%%", moisture_percentage[3]);
+//		break;
+//	case 3:
+//	  sprintf((char *)disp.f_line, "HSens5: %2.f%%", moisture_percentage[4]);
+//	  sprintf((char *)disp.s_line, "HSens6: %2.f%%", moisture_percentage[5]);
+//		break;
+//	case 4:
+//	  sprintf((char *)disp.f_line, "AirT: %2.f degC", Temperature);
+//	  sprintf((char *)disp.s_line, "AirH: %2.f%% ", Humidity);
+//		break;
+//	case 5:
+//	  sprintf((char *)disp.f_line, "LightInt: %2.f%%", lightIntensity);
+//	  sprintf((char *)disp.s_line, " ");
+//		break;
+//	default:
+//		break;
+//	}
+//	lcd_display(&disp);
+//}
+/*Funkcja dająca na wyświetlacz surowe wartości ADC*/
 void displayReadings(int disp_No){
 	switch(disp_No){
 	case 1:
-	  sprintf((char *)disp.f_line, "HSens1: %2.f%%", moisture_percentage[0]);
-	  sprintf((char *)disp.s_line, "HSens2: %2.f%%", moisture_percentage[1]);
+	  sprintf((char *)disp.f_line, "HSens1: %lu", (unsigned long)ADC_VAL[0]);
+	  sprintf((char *)disp.s_line, "HSens2: %lu", (unsigned long)ADC_VAL[1]);
 		break;
 	case 2:
-	  sprintf((char *)disp.f_line, "HSens3: %2.f%%", moisture_percentage[2]);
-	  sprintf((char *)disp.s_line, "HSens4: %2.f%%", moisture_percentage[3]);
+	  sprintf((char *)disp.f_line, "HSens3: %lu", (unsigned long)ADC_VAL[2]);
+	  sprintf((char *)disp.s_line, "HSens4: %lu", (unsigned long)ADC_VAL[3]);
 		break;
 	case 3:
-	  sprintf((char *)disp.f_line, "HSens5: %2.f%%", moisture_percentage[4]);
-	  sprintf((char *)disp.s_line, "HSens6: %2.f%%", moisture_percentage[5]);
+	  sprintf((char *)disp.f_line, "HSens5: %lu", (unsigned long)ADC_VAL[4]);
+	  sprintf((char *)disp.s_line, "HSens6: %lu", (unsigned long)ADC_VAL[5]);
 		break;
 	case 4:
 	  sprintf((char *)disp.f_line, "AirT: %2.f degC", Temperature);
 	  sprintf((char *)disp.s_line, "AirH: %2.f%% ", Humidity);
 		break;
 	case 5:
-	  sprintf((char *)disp.f_line, "LightInt: %2.f%%", lightIntensity);
+	  sprintf((char *)disp.f_line, "LightInt: %lu", (unsigned long)ADC_VAL[6]);
 	  sprintf((char *)disp.s_line, " ");
 		break;
 	default:

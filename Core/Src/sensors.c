@@ -1,5 +1,5 @@
 #include "main.h"
-//#include "adc.h"
+#include "adc.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -45,11 +45,11 @@
 	/*=============================Odpowiedź czujnika=============================*/
 	uint8_t sensorResponse(void){
 		uint8_t Response = 0;
-		delay_us (40); 												// Poczekaj 40us
+		delay_us (40);												// Poczekaj 40us
 		/*Sprawdź czy czujnik ma odpowiedź, w przeciwnym razie daj błąd*/
 		if (!(HAL_GPIO_ReadPin (PORT_A, DHT11_PIN))){
 			delay_us (80); 											//Zaczekaj 80us
-			if ((HAL_GPIO_ReadPin (PORT_A, DHT11_PIN))) Response = 1;
+			if ((HAL_GPIO_ReadPin (PORT_A, DHT11_PIN))) Response = 0;
 			else Response = -1; 									// 255
 		}
 		while ((HAL_GPIO_ReadPin (PORT_A, DHT11_PIN)));     		// Poczekaj na pin aż przejdzie w stan niski
@@ -77,39 +77,44 @@
 	void DHT11_allData(){
 		  DHT11sensorInit();
 		  Presence = sensorResponse();
-		  Rh_byte1 = sensorRead ();
-		  Rh_byte2 = sensorRead ();
-		  Temp_byte1 = sensorRead ();
-		  Temp_byte2 = sensorRead ();
-		  SUM = sensorRead();
-		  TEMP = Temp_byte1;
-		  RH = Rh_byte1;
-		  Temperature = (float) TEMP;
-		  Humidity = (float) RH;
+		  if(Presence == 0){
+			  Rh_byte1 = sensorRead ();
+			  Rh_byte2 = sensorRead ();
+			  Temp_byte1 = sensorRead ();
+			  Temp_byte2 = sensorRead ();
+			  SUM = sensorRead();
+			  TEMP = Temp_byte1;
+			  RH = Rh_byte1;
+			  Temperature = (float) TEMP;
+			  Humidity = (float) RH;
+		  }
 	}
 
 
-//	/*Odczyt wszystkich kanałów analogowych ADC1, ADC_VAL[0-5] to wilgoć gleby, ADC_VAL[6] to czujnik ADC_VAL[6] */
-//	void analogDeviceReadDMA(){
-//
-//			/*Wartość analogowa jest odwrotnie proporcjonalna do procentowego wskaźnika wilgotności, im większe napięcie tym mniejsza wilgoć*/
-//
-//			HAL_ADC_Start_DMA(&hadc1, ADC_VAL, numberOfADCChannels); //Odczyt poprzez DMA ze wszystkich kanałów ADC
-//			delay_us(1000);						   //Bez tego delaya się rozlatuje odczyt przez zbyt małą ilość czasu na próbkowanie sygnału analogowego
-//			HAL_ADC_Stop_DMA(&hadc1); 			   //Zatrzymaj odczyt ADC przez DMA
-//
-//			for(int i = 0; i<numberOfADCChannels; i++){ 			   //Przeskalowanie na procenty (wcześniej test czujnika jak nisko może zejść analogowa wartość w przypadku maksymalnie wilgotnej gleby)
-//				moisture_percentage[i] = 100-( map(ADC_VAL[i], 1000, 3970, 0, 100));
-//
-//				if (moisture_percentage[i]>100){moisture_percentage[i] = 100;} //Przy zwarciu czujnika daje wartość
-//				if (moisture_percentage[i]<0){moisture_percentage[i] = 0;}
-//			}
-//
-//			/*Wartość analogowa jest wprost proporcjonalna do procentowego wskaźnika nasłonecznienia*/
-//			//lightIntensity = map(ADC_VAL[6], 150, 4095, 0, 100); // Minimalna wartość jaką się dało uzyskać to 150
-//			//sendAllReadingsUART(); 								 //Wyślij wszystko po UART'cie
-//
-//		}
+	/*Odczyt wszystkich kanałów analogowych ADC1, ADC_VAL[0-5] to wilgoć gleby, ADC_VAL[6] to czujnik ADC_VAL[6] */
+	void analogDeviceReadDMA(){
+
+			/*Wartość analogowa jest odwrotnie proporcjonalna do procentowego wskaźnika wilgotności, im większe napięcie tym mniejsza wilgoć*/
+
+			HAL_ADC_Start_DMA(&hadc1, ADC_VAL, 7); //Odczyt poprzez DMA ze wszystkich kanałów ADC
+			delay_us(3000);						   //Bez tego delaya się rozlatuje odczyt przez zbyt małą ilość czasu na próbkowanie sygnału analogowego
+			HAL_ADC_Stop_DMA(&hadc1); 			   //Zatrzymaj odczyt ADC przez DMA
+
+			for(int i = 0; i<sizeof(moisture_percentage)/sizeof(moisture_percentage[0]); i++){ 			   //Przeskalowanie na procenty (wcześniej test czujnika jak nisko może zejść analogowa wartość w przypadku maksymalnie wilgotnej gleby)
+
+				moisture_percentage[i] = 100-( map(ADC_VAL[i], 1000, 3970, 0, 100));
+
+				if (moisture_percentage[i]>100){moisture_percentage[i] = 100;} //Przy zwarciu czujnika daje wartość
+				if (moisture_percentage[i]<0){moisture_percentage[i] = 0;}
+			}
+
+			/*Wartość analogowa jest wprost proporcjonalna do procentowego wskaźnika nasłonecznienia*/
+
+			lightIntensity = map(ADC_VAL[6], 150, 4095, 0, 100); // Minimalna wartość jaką się dało uzyskać to 150
+
+			//sendAllReadingsUART(); 								 //Wyślij wszystko po UART'cie
+
+		}
 
 //
 //

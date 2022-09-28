@@ -4,3 +4,4 @@
 ../Core/Src/sensors.c:46:10:sensorResponse	16	static
 ../Core/Src/sensors.c:61:10:sensorRead	16	static
 ../Core/Src/sensors.c:77:7:DHT11_allData	8	static
+../Core/Src/sensors.c:95:7:analogDeviceReadDMA	24	static

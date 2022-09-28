@@ -11,24 +11,27 @@
 /*==========================================================================================*/
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-	/*Przerwanie po upłynięciu tim6 równego 10000 cykli (po sekundzie) - zebranie danych z czujników*/
-		if ((count == sensorRead_freq) || (count == 0)){
-		//analogDeviceReadDMA();
-		DHT11_allData();
-		displayReadings(disp_No);
-		}
-		count++; //Dodawaj jeden co sekundę do tego countera
-		if (count >= sensorRead_freq) count = 1; // Jeśli ilość sekund count jest większa od sensor_read_freq to zresetuj count do 1
+	if ((count == sensorRead_freq) || (count == 0)){
+			analogDeviceReadDMA();
+			DHT11_allData();
+			displayReadings(disp_No);
+			}
+			count++; //Dodawaj jeden co sekundę do tego countera
+			if (count >= sensorRead_freq) count = 1; // Jeśli ilość sekund count jest większa od sensor_read_freq to zresetuj count do 1
 	}
 
 /*Przerwanie na liniach 10-15, w tym przypadku to jest button na płytce Nucleo*/
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-		if(!(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin))){
-		disp_No++;
-		if (disp_No == numberOfDisplays) disp_No = 1;
-		displayReadings(disp_No);
-		}
+	if(!(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin))){
+				disp_No++;
+				if (disp_No == 6) disp_No = 1;
+				displayReadings(disp_No);
+				}
+
+
+
+/*==========================================================================================*/
 
 	//	while((HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin)));
 		/*Zmień częstotliwość odczytów z czujników*/
@@ -61,6 +64,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 }
 
 
+/*==========================================================================================*/
 
 /*Milisekundowy delay na timerze, tim2 prescaler 72-1, brak przerwań przez tim2*/
 void delay_us(uint32_t time){
@@ -77,3 +81,5 @@ void sendString_UART(char*text){
 float map(uint16_t val, int in_min, int in_max, int out_min, int out_max) {
   return (val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
+
+/*==========================================================================================*/

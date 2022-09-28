@@ -11,7 +11,7 @@
 	/*Zmienne przechowujące bufor dla przesyłania UART'em*/
 	extern char UartOutText[100], UartInput[5];
 	/*ADC zmienna*/
-
+	extern const short numberOfADCChannels;
 	extern uint8_t Rh_byte1, Rh_byte2, Temp_byte1, Temp_byte2;
 	extern uint16_t SUM, RH, TEMP;
 	extern uint8_t Presence;
@@ -33,7 +33,8 @@
 
 	extern short numberOfDisplays;
 
-	extern const short numberOfADCChannels;
+
+
 #endif /* SRC_GLOBALVARS_H_ */
 
 

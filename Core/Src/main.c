@@ -18,6 +18,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
+#include "dma.h"
 #include "i2c.h"
 #include "tim.h"
 #include "usart.h"
@@ -91,15 +93,19 @@ int main(void)
   MX_USART2_UART_Init();
   MX_I2C1_Init();
   MX_TIM6_Init();
+  MX_DMA_Init();
+  MX_ADC1_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
-	  HAL_TIM_Base_Start(&htim2); 	 // Start timer2 w trybie normalnym
-	  HAL_TIM_Base_Start_IT(&htim6); // Start timera6 w trybie przerwania
+  	  HAL_TIM_Base_Start(&htim2); 	 // Start timer2 w trybie normalnym
+
 	  disp.addr = (0x27 << 1);		 // Adres LCD'ka po I2C
 	  disp.bl = true;				 // Włącz podświetlenie
 	  lcd_init(&disp);				 // Inicjalizuj LCD
-	  displayReadings(disp_No);		 // Ekran startowy HSens1 i HSens2
+	  HAL_Delay(1000);				 // musi to tu być inaczej z jakiegoś powodu będzie trzeba klikać reset na STMce po utracie zasilania
+
+	  HAL_TIM_Base_Start_IT(&htim6); // Start timera6 w trybie przerwania
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -107,8 +113,6 @@ int main(void)
   while (1)
   {
 	  /*TU KOD NIGDZIE INDZIEJ*/
-
-
 
     /* USER CODE END WHILE */
 
@@ -154,7 +158,8 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_I2C1;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_I2C1|RCC_PERIPHCLK_ADC12;
+  PeriphClkInit.Adc12ClockSelection = RCC_ADC12PLLCLK_DIV1;
   PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_HSI;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
