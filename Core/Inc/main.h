@@ -53,7 +53,12 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+void delay_us(uint32_t time);
+void sendString_UART(char*text);
+float map(uint16_t val, int in_min, int in_max, int out_min, int out_max);
+void displayReadings(int disp_No);
+void sendAllReadingsUART();
+void analogDeviceReadDMA();
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

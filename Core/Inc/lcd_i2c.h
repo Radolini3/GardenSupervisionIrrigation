@@ -1,10 +1,3 @@
-/*
- * lcd_i2c.h
- *
- *  Created on: Sep 18, 2022
- *      Author: HP
- */
-
 #ifndef INC_LCD_I2C_H_
 #define INC_LCD_I2C_H_
 
@@ -52,4 +45,3 @@ void lcd_display(struct lcd_disp * lcd);
 void lcd_clear(struct lcd_disp * lcd);
 
 #endif /* INC_LCD_I2C_H_ */
-
