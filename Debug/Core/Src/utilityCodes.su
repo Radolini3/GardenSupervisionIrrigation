@@ -1,5 +1,0 @@
-../Core/Src/utilityCodes.c:11:7:HAL_TIM_PeriodElapsedCallback	16	static
-../Core/Src/utilityCodes.c:23:8:HAL_GPIO_EXTI_Callback	16	static
-../Core/Src/utilityCodes.c:33:7:delay_us	16	static
-../Core/Src/utilityCodes.c:39:7:sendString_UART	16	static
-../Core/Src/utilityCodes.c:44:8:map	24	static
