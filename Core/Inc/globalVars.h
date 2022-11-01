@@ -18,5 +18,10 @@
 	extern short sensorRead_freq;
 	extern short pushCount;
 
+	extern short waterMode; // Jeśli jest 1 to jest auto, jeśli 0 to tryb manual
+	extern short moistureThreshold;
+	extern short moistureAverage;
+	extern short sum;
+
 #endif /* SRC_GLOBALVARS_H_ */
 

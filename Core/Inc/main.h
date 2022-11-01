@@ -54,6 +54,7 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 void delay_us(uint32_t time);
+int debounce(uint32_t time);
 void sendString_UART(char*text);
 float map(uint16_t val, int in_min, int in_max, int out_min, int out_max);
 void displayReadings(int disp_No);
@@ -73,6 +74,18 @@ void analogDeviceReadDMA();
 #define USART_RX_GPIO_Port GPIOA
 #define LD2_Pin GPIO_PIN_5
 #define LD2_GPIO_Port GPIOA
+#define B_MODE_Pin GPIO_PIN_11
+#define B_MODE_GPIO_Port GPIOB
+#define B_MODE_EXTI_IRQn EXTI15_10_IRQn
+#define TR_DOWN_Pin GPIO_PIN_12
+#define TR_DOWN_GPIO_Port GPIOB
+#define TR_DOWN_EXTI_IRQn EXTI15_10_IRQn
+#define TR_UP_Pin GPIO_PIN_14
+#define TR_UP_GPIO_Port GPIOB
+#define TR_UP_EXTI_IRQn EXTI15_10_IRQn
+#define B_WATER_Pin GPIO_PIN_15
+#define B_WATER_GPIO_Port GPIOB
+#define B_WATER_EXTI_IRQn EXTI15_10_IRQn
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14

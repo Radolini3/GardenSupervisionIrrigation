@@ -22,5 +22,11 @@
 		 struct lcd_disp disp;
 		 int count = 0;
 		 /*Zmienna do sterowania czasem między odczytami i przesyłem danych z cuzjników*/
-		 short sensorRead_freq = 60;
+		 short sensorRead_freq = 10;
 		 short pushCount = 0;
+
+		 short waterMode = 0; // Jeśli jest 1 to jest auto, jeśli 0 to tryb manual
+		 short moistureThreshold = 50;
+		 short moistureAverage = 0;
+		 short sum = 0;
+

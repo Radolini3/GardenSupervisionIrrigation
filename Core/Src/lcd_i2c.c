@@ -106,6 +106,10 @@ void displayReadings(int disp_No){
 		sprintf((char *)disp.f_line, "HSens5: %2.f%%", moisture_percentage[4]);
 		sprintf((char *)disp.s_line, "HSens6: %2.f%%", moisture_percentage[5]);
 		break;
+	case 5:
+		sprintf((char *)disp.f_line, "Avg: %d%%", moistureAverage);
+		sprintf((char *)disp.s_line, " ");
+		break;
 	default:
 		break;
 	}

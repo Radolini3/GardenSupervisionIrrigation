@@ -60,6 +60,7 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+/* USER CODE END 0 */
 
 /**
   * @brief  The application entry point.
@@ -101,7 +102,7 @@ int main(void)
 	  disp.addr = (0x27 << 1);		 // Adres LCD'ka po I2C
 	  disp.bl = true;				 // Włącz podświetlenie
 	  lcd_init(&disp);				 // Inicjalizuj LCD
-	  HAL_Delay(500);				 //Bez tego delaya nie wstanie STMka po utracie zasilania
+	  HAL_Delay(500);				 // Bez tego delaya nie wstanie STMka po utracie zasilania
 
 	  HAL_TIM_Base_Start_IT(&htim6); // Start timera6 w trybie przerwania
   /* USER CODE END 2 */
