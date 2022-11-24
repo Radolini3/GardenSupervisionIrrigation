@@ -1,0 +1,2 @@
+../Core/Src/SensorReadings.c:10:7:analogDeviceReadDMA	32	static
+../Core/Src/SensorReadings.c:44:7:sendAllReadingsUART	16	static
