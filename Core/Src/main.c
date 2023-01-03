@@ -103,7 +103,7 @@ int main(void)
   disp.addr = (0x27 << 1);		 // Adres LCD'ka po I2C
   disp.bl = true;				 // Włącz podświetlenie
   lcd_init(&disp);				 // Inicjalizuj LCD
-  HAL_Delay(500);				 // Bez tego delaya nie wstanie STMka po utracie zasilania
+  HAL_Delay(500);				 // Bez tego delaya nie wstanie STMka po utracie zasilania przez timer_IT
 
   HAL_TIM_Base_Start_IT(&htim6); // Start timera6 w trybie przerwania
 
@@ -124,9 +124,10 @@ HAL_GPIO_WritePin(WATER_PIN_GPIO_Port, WATER_PIN_Pin, GPIO_PIN_SET); // odwróco
 		 displayReadings(disp_No);
 		 sprintf(UartOutText, "C/%d/%d/%d\n", moistureThreshold, waterMode, waterTimeMins);
 		 sendString_UART(UartOutText);
-
 		 valueChanged = 0;
 	 }
+
+
 
   }
   /* USER CODE END 3 */

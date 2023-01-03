@@ -13,6 +13,7 @@
 		if ((count == sensorRead_freq) || (count == 0)){
 			analogDeviceReadDMA();
 			displayReadings(disp_No);
+			sendAllReadingsUART(); 								 //Wyślij wszystko po UART'cie
 		}
 		/*============================================================*/
 		/*Logika załączania się podlewania automatycznie - Jeśli tryb jest auto i średnia wilgoci mniejsza od progu załącz podlewanie, dodatkowo żeby co pomiar nie włączał na nowo podlewania co sekundę  */
@@ -33,7 +34,7 @@
 			displayReadings(disp_No);
 		}
 		/*============================================================*/
-		 /*Odpalanie podlewania z przycisku - nie można przez interrupt handler bo jak policzysz czas xd */
+		 /*Odpalanie podlewania z przycisku - nie można bezpośrednio przez interrupt handler */
 		if (waterMode == 0 && waterButtonPressed == 1){
 			if (isIrrigONMan == 0){
 				HAL_GPIO_WritePin(WATER_PIN_GPIO_Port, WATER_PIN_Pin, GPIO_PIN_RESET);
@@ -67,15 +68,21 @@
 		count++; //Dodawaj jeden co sekundę do tego countera
 		if (count >= sensorRead_freq) count = 0;
 		// Jeśli ilość sekund count jest większa od sensor_read_freq to zresetuj count do 0,
-		// pozwala to ustawić jedną zmienną częstotliwość odświeżania pomiarów ile tylko dusza zapragnie
+		// pozwala to ustawić jedną zmienną częstotliwość odświeżania pomiarów
 	}
 
-	/*Przerwanie na liniach 10-15, w tym przypadku to jest button na płytce Nucleo*/
+
+
+
+
+
+
+	/*Przerwanie na liniach GPIOEXTI*/
 	void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	{
 		if(!(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin))){
 			disp_No++;
-			if (disp_No == 6) disp_No = 1;
+			if (disp_No == 7) disp_No = 1;
 				displayReadings(disp_No);
 		}
 		/*Ustaw większy próg rozpoczęcia podlewania*/

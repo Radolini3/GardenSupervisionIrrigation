@@ -12,7 +12,7 @@
 		/*Wartość analogowa jest odwrotnie proporcjonalna do procentowego wskaźnika wilgotności, im większe napięcie tym mniejsza wilgoć gleby*/
 
 		HAL_ADC_Start_DMA(&hadc1, ADC_VAL, 8);		 	//Odczyt poprzez DMA ze wszystkich kanałów ADC
-		delay_us(1000);							    	 //Bez tego delaya się rozlatuje odczyt przez zbyt małą ilość czasu na próbkowanie sygnału analogowego
+		delay_us(1000);							    	 //Bez tego delaya się odczyt jest niepoprawny przez zbyt małą ilość czasu na próbkowanie sygnału analogowego
 		HAL_ADC_Stop_DMA(&hadc1); 				     	//Zatrzymaj odczyt ADC przez DMA
 
 		/*Wzory z datasheetu czujnika SHT30 Temperature & Humidity Sensor V1.0*/
@@ -33,10 +33,6 @@
 		sum += (short)moisture_percentage[i];
 		}
 		moistureAverage = sum/6;
-		/*Wartość analogowa jest wprost proporcjonalna do procentowego wskaźnika nasłonecznienia*/
-
-		sendAllReadingsUART(); 								 //Wyślij wszystko po UART'cie
-
 
 		}
 
@@ -44,7 +40,7 @@
 	void sendAllReadingsUART(){
 		/*Przesył pod przechwytywanie do formatu csv*/
 		sendString_UART("/");
-		sprintf(UartOutText, "%1.f", Temperature);   //Temperatura z DHT11
+		sprintf(UartOutText, "%1.f", Temperature);   //Temperatura
 		sendString_UART(UartOutText);
 		sendString_UART("/");
 		sprintf(UartOutText, "%1.f", Humidity);	   // Wilgotność powietrza
@@ -54,6 +50,9 @@
 			sprintf(UartOutText, "%1.f", moisture_percentage[i]);
 			sendString_UART(UartOutText);
 		}
+		sendString_UART("/");
+		sprintf(UartOutText, "%i", moistureAverage);	   // Wilgotność powietrza
+		sendString_UART(UartOutText);
 		sendString_UART("\n");
 	}
 
